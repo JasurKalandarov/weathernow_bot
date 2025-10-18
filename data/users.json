@@ -3,15 +3,15 @@
     "1158242592": "ru"
   },
   "user_cities": {
-    "1158242592": "Tashkent"
+    "1158242592": "USA"
   },
   "last_messages": {
-    "1158242592": 374
+    "1158242592": 501
   },
   "user_notifications": {
     "1158242592": {
       "enabled": true,
-      "hour": 19
+      "hour": 13
     }
   }
 }

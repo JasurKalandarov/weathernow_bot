@@ -1,13 +1,14 @@
-from aiogram import types
+from aiogram import Router, types
 from aiogram import Bot
-from core.dispatcher import dp
 from services.weather_service import get_weather
 from utils.state import user_languages, last_messages, user_cities, persist_state
 from keyboards.forecast_kb import forecast_keyboard
 from utils.delete import delete_previous
 
+router = Router()
 
-@dp.message()
+
+@router.message()
 async def handle_city(message: types.Message, bot: Bot):
     await delete_previous(bot, message.chat.id, message.from_user.id)
 

@@ -1,12 +1,49 @@
-from aiogram import types, F
-from core.dispatcher import dp
+from aiogram import Router, types, F
 from services.weather_service import get_weather, get_forecast_3days
 from keyboards.forecast_kb import forecast_keyboard
 from utils.state import user_languages, user_cities
 
+router = Router()
+
+
+@router.callback_query(F.data == "change_lang")
+async def change_lang(callback: types.CallbackQuery):
+    await callback.message.answer("🌐 Изменение языка")
+    await callback.answer()
+
+
+@router.callback_query(F.data == "change_city")
+async def change_city(callback: types.CallbackQuery):
+    await callback.message.answer("🏙 Введите новый город")
+    await callback.answer()
+
+
+@router.callback_query(F.data == "change_time")
+async def change_time(callback: types.CallbackQuery):
+    await callback.message.answer("⏰ Изменение времени рассылки")
+    await callback.answer()
+
+
+@router.callback_query(F.data == "enable_notifications")
+async def enable_notifications(callback: types.CallbackQuery):
+    await callback.message.answer("🔔 Рассылка включена!")
+    await callback.answer()
+
+
+@router.callback_query(F.data == "disable_notifications")
+async def disable_notifications(callback: types.CallbackQuery):
+    await callback.message.answer("🔕 Рассылка отключена!")
+    await callback.answer()
+
+
+@router.callback_query(F.data == "back_to_forecast")
+async def back_to_forecast(callback: types.CallbackQuery):
+    await callback.message.answer("⬅️ Возвращаюсь к прогнозу погоды 🌦️")
+    await callback.answer()
+
 
 # --- Прогноз на сегодня ---
-@dp.callback_query(F.data == "forecast_today")
+@router.callback_query(F.data == "forecast_today")
 async def forecast_today(callback: types.CallbackQuery):
     lang = user_languages.get(callback.from_user.id, "ru")
     city = user_cities.get(callback.from_user.id)
@@ -37,7 +74,7 @@ async def forecast_today(callback: types.CallbackQuery):
 
 
 # --- Прогноз на 3 дня ---
-@dp.callback_query(F.data == "forecast_3days")
+@router.callback_query(F.data == "forecast_3days")
 async def forecast_3days(callback: types.CallbackQuery):
     lang = user_languages.get(callback.from_user.id, "ru")
     city = user_cities.get(callback.from_user.id)

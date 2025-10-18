@@ -7,6 +7,7 @@ from core.dispatcher import dp
 from config import BOT_TOKEN
 from services.scheduler import send_daily_forecasts
 
+# Импорт хендлеров для регистрации роутеров
 import handlers.start
 import handlers.weather
 import handlers.callbacks
@@ -14,11 +15,7 @@ import handlers.settings
 
 
 async def on_startup(bot: Bot):
-    """
-    Запуск планировщика рассылки
-    """
     scheduler = AsyncIOScheduler()
-    # Задача выполняется каждый час в 00 минут (можно поменять, например, каждые 5 минут для теста)
     scheduler.add_job(send_daily_forecasts, "cron", minute=0, args=[bot])
     scheduler.start()
     print("✅ Планировщик рассылки запущен")
@@ -32,9 +29,6 @@ async def start_bot():
     await dp.start_polling(bot)
 
 
-# -----------------------------
-# Минимальный веб-сервер для Render
-# -----------------------------
 async def handle(request):
     return web.Response(text="✅ Bot is running")
 
@@ -42,7 +36,7 @@ async def handle(request):
 async def run_web():
     app = web.Application()
     app.router.add_get("/", handle)
-    port = 10000  # Render автоматически пробрасывает этот порт
+    port = 10000
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, host="0.0.0.0", port=port)
